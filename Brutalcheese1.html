@@ -6335,7 +6335,7 @@ document.querySelectorAll('input[id*="totalExtras"]').forEach((input) => {
     <br>
     
 
-    <button onclick="document.getElementById('cantidadpapas3carnes').hidden = false;document.getElementById('pedidoinput').value+= '%0A%0A1 PAPAS FRITAS 3 CARNES';incrementarContador();limpiarExtras();agregarAlCarrito('papas3carnes', 13990, 'https://kharma.cl/wp-content/uploads/2020/05/chorrillana-delibery_publicada.jpg')"
+    <button onclick="document.getElementById('cantidadpapas3carnes').hidden = false;document.getElementById('pedidoinput').value+= '%0A%0A1 PAPAS FRITAS 3 CARNES';incrementarContador();limpiarExtras();agregarAlCarrito('papas3carnes', 13990, 'https://kharma.cl/wp-content/uploads/2020/05/chorrillana-delibery_publicada.jpg'')"
     class="agregar-al-carrito-button">+ Agregar al carrito</button>
 
 </div>
@@ -6513,14 +6513,15 @@ document.querySelectorAll('input[id*="totalExtras"]').forEach((input) => {
         }
             </script>
         <div style="margin-top: 0px;" id="ventana-inicio">
-            <div class="modal-content" style="width: 90%; height: 80%;">
+            <div class="modal-content" style="width: 90%; height: 90%; margin-top: -5%;">
            
                 <h1 style="color: red; -webkit-text-stroke: 1px black; ">BRUTAL CHEESE</h1>
                 <img src="https://i.ibb.co/hFN9fByV/61f70eed-0fdd-48ca-a370-0d04bc76f475.jpg" alt="">
                 <h1 style="color: red; -webkit-text-stroke: 1px black;">Santa Zita #9115 LOCAL 3</h1>
+                <button type="button" onclick="document.getElementById('ventana-inicio').style.display = 'none'">Aceptar</button>
                 <h2 style="color: red; -webkit-text-stroke: 1px black;">+569 637 574 23</h2>
                 <h3 style="text-decoration: underline;">Colaciones y Eventos</h3>
-                <button type="button" onclick="document.getElementById('ventana-inicio').style.display = 'none'">Aceptar</button>
+             
                 <br>
     </div>
             </div>
@@ -6539,7 +6540,7 @@ document.querySelectorAll('input[id*="totalExtras"]').forEach((input) => {
                             
                         </div>
                         <div class="modal-footer">
-                            <p>Total:$
+                            <p>Total:$ <span style="color: green;">EXTRAS INCLUIDOS ✅</span>
                                 <input type="text" style="text-align: left;" value="0" readonly id="total">
                             </p>
                             <button style="color: #000 !important;" type="button" onclick="finalizarbutton();cerrarCarrito();actualizarInputs();" style="display: none;" id="finalizar-button">Finalizar</button>
