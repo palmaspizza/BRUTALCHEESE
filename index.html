@@ -530,13 +530,14 @@ html {
     scroll-behavior: smooth;
 }
 </style>
-<textarea name="pedido"  id="pedidoinput"></textarea>
+<input name="pedido"  id="pedidoinput"></input>
 <label for=""></label><br>
 <div id="burgersimple"></div>
         <h1 style="text-decoration: underline red; color: #000;">SIMPLES</h1>
+    
        
-
-    <script>
+          
+      <script>
         function agregarAlCarrito(nombre, precio) {
             alert(`Agregado al carrito:${nombre} -$${precio} c/u`);
             
@@ -553,8 +554,59 @@ html {
                 document.getElementById("finalizar-button").style.display = 'block';
             }
         }
-        
-        
+      document.addEventListener("DOMContentLoaded", function () {
+    let checkboxes = document.querySelectorAll('.extra');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", actualizarExtras);
+    });
+});
+
+function actualizarExtras() {
+    let checkboxes = document.querySelectorAll('.extra');
+    let extrasSeleccionados = Array.from(checkboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.dataset.nombre);
+
+    let pedidoInput = document.getElementById("pedidoinput");
+    
+    if (pedidoInput) {
+        pedidoInput.value = extrasSeleccionados.join(", ");
+    } else {
+        console.error("El elemento con ID 'pedidoinput' no existe en el HTML.");
+    }
+}
+  
+document.addEventListener("DOMContentLoaded", function () {
+    let checkboxes = document.querySelectorAll('.extra');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", actualizarExtras);
+    });
+
+    actualizarExtras(); // Inicializa la lista de extras en el input
+});
+
+function actualizarExtras() {
+    let checkboxes = document.querySelectorAll('.extra');
+    let extrasSeleccionados = [];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            extrasSeleccionados.push(checkbox.getAttribute("data-nombre"));
+        }
+    });
+
+    let pedidoInput = document.getElementById("pedidoinput");
+
+    if (pedidoInput) {
+        pedidoInput.value = extrasSeleccionados.join(", ");
+        console.log("Extras seleccionados:", extrasSeleccionados); // Verificación en consola
+    } else {
+        console.error("Error: No se encontró el elemento con ID 'pedidoinput'.");
+    }
+}
+
         
     </script>
 
@@ -1286,8 +1338,11 @@ body {
         <button onclick="sumarTotalExtrasSinBorrar();dobleitalianaclasica();cerrarventanablack();agregartexto('%0A🍔HAMBURGUESA DOBLE');document.getElementById('ventana-inicio76').hidden = false" type="button" class="simpledobleitalianaclasica" id="italianaclasicadobleX" style="background-color: white; color: red;">HAMBURGUESA DOBLE| +$2000</button>
   <!-- Ventana de Selección de Extras -->
 
-
 <script>
+  </script>
+  
+<script>
+    
 function calcularTotal() {
   let total = 0;
 
@@ -1312,38 +1367,6 @@ function calcularTotal() {
 
 
 
-
-function actualizarExtras() {
-    const extrasSeleccionados = document.querySelectorAll('.extra:checked');
-    const pedidoinput = document.getElementById('pedidoinput');
-    const totalExtras = document.getElementById('totalExtras');
-
-    // Leer los valores actuales de los inputs
-    let total = parseInt(totalExtras.value, 10) || 0;
-    let pedidoActual = pedidoinput.value || '';
-
-    // Crear una lista de extras ya seleccionados
-    const ingredientesActuales = pedidoActual.split('%0A').filter(Boolean);
-
-    extrasSeleccionados.forEach((extra) => {
-        const extraNombre = extra.getAttribute('data-nombre');
-        const extraPrecio = parseInt(extra.value, 10);
-
-        // Solo agregar ingredientes nuevos
-        if (!ingredientesActuales.includes(extraNombre)) {
-            total += extraPrecio;
-            ingredientesActuales.push(extraNombre);
-        }
-    });
-
-    // Actualizar los valores finales
-    totalExtras.value = total;
-    pedidoinput.value = ingredientesActuales.join('%0A');
-}
-
-</script>
-
-<script>
 function limpiarExtras() {
     let checkboxes = document.querySelectorAll('.extra');
     checkboxes.forEach(checkbox => {
@@ -1572,7 +1595,7 @@ function dobleitalianaclasica() {
             <label for="totalExtrasBurgerALoPobre">Total Extras:</label><br>
             <input type="text" id="totalExtrasBurgerALoPobre" readonly value="0">
         
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="limpiarExtras();">Listo</button><br>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();limpiarExtras();">Listo</button><br>
   <button type="button" style="background-color: red; color: #fff;" onclick="limpiarExtras();"hidden>No, Gracias</button>
   
             <br><br>
@@ -1794,8 +1817,8 @@ function dobleburgeralopobre() {
             <label for="totalExtrasBurgerLuco">Total Extras:</label><br>
             <input type="text" id="totalExtrasBurgerLuco" readonly value="0">
           
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -2121,8 +2144,8 @@ function dobleburgerluco() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasBurgerJamonCrocante" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -2328,8 +2351,8 @@ function dobleburgerjamoncrocante() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasBurgerDinamica" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -2544,8 +2567,8 @@ function dobleburgerdinamica() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasBurgerDeLaCasa" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -2757,8 +2780,8 @@ function dobleburgerdelacasa() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasBurgerSuperQueso" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -2965,8 +2988,8 @@ function dobleburgersuperqueso() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasBurgerCheddar" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -3177,8 +3200,8 @@ function dobleburgercheddar() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasItalianoClasico" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -3383,8 +3406,8 @@ function dobleitalianoclasico() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasLuco" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -3606,8 +3629,8 @@ function dobleluco() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasALoPobre" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -3817,8 +3840,8 @@ function doblealopobre() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasJamonCrocante" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -4028,8 +4051,8 @@ function doblejamoncrocante() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasJamonCrocante" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -4247,8 +4270,8 @@ function dobledinamico() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasChacarero" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -4450,8 +4473,8 @@ function doblechacarero() {
     <br><br>
     <label for="totalextras">Total Extras:</label><br>
     <input type="text" id="totalExtrasSuperQueso" readonly value="0">
-    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
     <br><br>
   </div>
@@ -4626,7 +4649,7 @@ function doblesuperqueso() {
 
     <div id="divscompletoN" style="border: 2px solid black; background-color: white; position: relative; height: 100%; width: 100%; display: none;">
         <label>Selecciona una opción</label><br>
-        <button onclick="sumarTotalExtrasSinBorrar();simplecompletoN();cerrarventanablack();agregartexto('%COMPLETO N');document.getElementById('ventana-inicio933').hidden = false" type="button" class="simpledoblecompletoN" id="completoNsimpleX" style="color: black; background-color: yellow;">COMPLETO N</button>
+        <button onclick="sumarTotalExtrasSinBorrar();simplecompletoN();cerrarventanablack();agregartexto('%0ACOMPLETO N');document.getElementById('ventana-inicio933').hidden = false" type="button" class="simpledoblecompletoN" id="completoNsimpleX" style="color: black; background-color: yellow;">COMPLETO N</button>
         <button onclick="sumarTotalExtrasSinBorrar();doblecompletoN();cerrarventanablack();agregartexto('%0ACOMPLETO XL');document.getElementById('ventana-inicio933').hidden = false" type="button" class="simpledoblecompletoN" id="completoNdobleX" style="background-color: white; color: red;">COMPLETO XL +$1000</button>
         <div class="centauro" hidden z-index="300000" id="ventanaExtrasCompletoALoPobre" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto;">
             <h3>¡Añade un toque especial con nuestros extras 🍔</h3>
@@ -4650,11 +4673,9 @@ function doblesuperqueso() {
               <input type="checkbox" class="extraCompletoALoPobre" value="1000" data-nombre="Extra: Cebolla acaramelizada" onchange="actualizarExtrasCompletoLuco()"> 🧅 Cebolla acaramelizada (+$1000)
             </label><br>
             <br><br>
-            <label for="totalExtrasCompletoLuco">Total Extras:</label><br>
-            <input type="text" id="totalExtrasCompletoLuco" readonly value="0">
-          
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+        
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -4822,8 +4843,8 @@ let = basePriceY = 2000
 
     <div id="divscompletoITALIANO" style="border: 2px solid black; background-color: white; position: relative; height: 100%; width: 100%; display: none;">
         <label>Selecciona una opción</label><br>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();simplecompletoITALIANO();cerrarventanablack();agregartexto('%COMPLETO ITALIANO')" type="button" class="simpledoblecompletoITALIANO" id="completoITALIANOsimpleX" style="color: black; background-color: yellow;">COMPLETO ITALIANO</button>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();doblecompletoITALIANO();cerrarventanablack();agregartexto('%0ACOMPLETO ITALIANO XL')" type="button" class="simpledoblecompletoITALIANO" id="completoITALIANOdobleX" style="background-color: white; color: red;">COMPLETO ITALIANO XL +$1000</button>
+        <button onclick="sumarTotalExtrasSinBorrar();simplecompletoITALIANO();cerrarventanablack();agregartexto('%0ACOMPLETO ITALIANO')" type="button" class="simpledoblecompletoITALIANO" id="completoITALIANOsimpleX" style="color: black; background-color: yellow;">COMPLETO ITALIANO</button>
+        <button onclick="sumarTotalExtrasSinBorrar();doblecompletoITALIANO();cerrarventanablack();agregartexto('%0ACOMPLETO ITALIANO XL')" type="button" class="simpledoblecompletoITALIANO" id="completoITALIANOdobleX" style="background-color: white; color: red;">COMPLETO ITALIANO XL +$1000</button>
         <div class="centauro" hidden z-index="300000" id="ventanaExtrasCompletoALoPobre" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto;">
             <h3>¡Añade un toque especial con nuestros extras 🍔</h3>
             <label>
@@ -4849,8 +4870,8 @@ let = basePriceY = 2000
             <label for="totalExtrasCompletoITALIANO">Total Extras:</label><br>
             <input type="text" id="totalExtrasCompletoITALIANO" readonly value="0">
           
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -5015,8 +5036,8 @@ let = basePriceY = 2000
 
     <div id="divscompletoLUCO" style="border: 2px solid black; background-color: white; position: relative; height: 100%; width: 100%; display: none;">
         <label>Selecciona una opción</label><br>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();simplecompletoLUCO();cerrarventanablack();agregartexto('%COMPLETO LUCO')" type="button" class="simpledoblecompletoLUCO" id="completoLUCOsimpleX" style="color: black; background-color: yellow;">COMPLETO LUCO</button>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();doblecompletoLUCO();cerrarventanablack();agregartexto('%0ACOMPLETO LUCO XL')" type="button" class="simpledoblecompletoLUCO" id="completoLUCOdobleX" style="background-color: white; color: red;">COMPLETO LUCO XL +$1000</button>
+        <button onclick="sumarTotalExtrasSinBorrar();simplecompletoLUCO();cerrarventanablack();agregartexto('%0ACOMPLETO LUCO')" type="button" class="simpledoblecompletoLUCO" id="completoLUCOsimpleX" style="color: black; background-color: yellow;">COMPLETO LUCO</button>
+        <button onclick="sumarTotalExtrasSinBorrar();doblecompletoLUCO();cerrarventanablack();agregartexto('%0ACOMPLETO LUCO XL')" type="button" class="simpledoblecompletoLUCO" id="completoLUCOdobleX" style="background-color: white; color: red;">COMPLETO LUCO XL +$1000</button>
         <div class="centauro" hidden z-index="300000" id="ventanaExtrasCompletoALoPobre" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto;">
             <h3>¡Añade un toque especial con nuestros extras 🍔</h3>
             <label>
@@ -5042,8 +5063,8 @@ let = basePriceY = 2000
             <label for="totalExtrasCompletoLUCO">Total Extras:</label><br>
             <input type="text" id="totalExtrasCompletoLUCO" readonly value="0">
           
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -5207,8 +5228,8 @@ let = basePriceR = 2500
 
     <div id="divscompletoPEPINILLO" style="border: 2px solid black; background-color: white; position: relative; height: 100%; width: 100%; display: none;">
         <label>Selecciona una opción</label><br>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();simplecompletoPEPINILLO();cerrarventanablack();agregartexto('%COMPLETO PEPINILLO')" type="button" class="simpledoblecompletoPEPINILLO" id="completoPEPINILLOsimpleX" style="color: black; background-color: yellow;">COMPLETO PEPINILLO</button>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();doblecompletoPEPINILLO();cerrarventanablack();agregartexto('%0ACOMPLETO PEPINILLO XL')" type="button" class="simpledoblecompletoPEPINILLO" id="completoPEPINILLOdobleX" style="background-color: white; color: red;">COMPLETO PEPINILLO XL +$1000</button>
+        <button onclick="sumarTotalExtrasSinBorrar();simplecompletoPEPINILLO();cerrarventanablack();agregartexto('%0ACOMPLETO PEPINILLO')" type="button" class="simpledoblecompletoPEPINILLO" id="completoPEPINILLOsimpleX" style="color: black; background-color: yellow;">COMPLETO PEPINILLO</button>
+        <button onclick="sumarTotalExtrasSinBorrar();doblecompletoPEPINILLO();cerrarventanablack();agregartexto('%0ACOMPLETO PEPINILLO XL')" type="button" class="simpledoblecompletoPEPINILLO" id="completoPEPINILLOdobleX" style="background-color: white; color: red;">COMPLETO PEPINILLO XL +$1000</button>
         <div class="centauro" hidden z-index="300000" id="ventanaExtrasCompletoALoPobre" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto;">
             <h3>¡Añade un toque especial con nuestros extras 🍔</h3>
             <label>
@@ -5234,8 +5255,8 @@ let = basePriceR = 2500
             <label for="totalExtrasCompletoPEPINILLO">Total Extras:</label><br>
             <input type="text" id="totalExtrasCompletoPEPINILLO" readonly value="0">
           
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -5398,8 +5419,8 @@ let = basePriceY = 2000
 
     <div id="divscompletoJAMONCROCANTE" style="border: 2px solid black; background-color: white; position: relative; height: 100%; width: 100%; display: none;">
         <label>Selecciona una opción</label><br>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();simplecompletoJAMONCROCANTE();cerrarventanablack();agregartexto('%COMPLETO JAMON CROCANTE')" type="button" class="simpledoblecompletoJAMONCROCANTE" id="completoJAMONCROCANTEsimpleX" style="color: black; background-color: yellow;">COMPLETO JAMON CROCANTE</button>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();doblecompletoJAMONCROCANTE();cerrarventanablack();agregartexto('%0ACOMPLETO JAMON CROCANTE XL')" type="button" class="simpledoblecompletoJAMONCROCANTE" id="completoJAMONCROCANTEdobleX" style="background-color: white; color: red;">COMPLETO JAMON CROCANTE XL +$1000</button>
+        <button onclick="sumarTotalExtrasSinBorrar();simplecompletoJAMONCROCANTE();cerrarventanablack();agregartexto('%0ACOMPLETO JAMON CROCANTE')" type="button" class="simpledoblecompletoJAMONCROCANTE" id="completoJAMONCROCANTEsimpleX" style="color: black; background-color: yellow;">COMPLETO JAMON CROCANTE</button>
+        <button onclick="sumarTotalExtrasSinBorrar();doblecompletoJAMONCROCANTE();cerrarventanablack();agregartexto('%0ACOMPLETO JAMON CROCANTE XL')" type="button" class="simpledoblecompletoJAMONCROCANTE" id="completoJAMONCROCANTEdobleX" style="background-color: white; color: red;">COMPLETO JAMON CROCANTE XL +$1000</button>
         <div class="centauro" hidden z-index="300000" id="ventanaExtrasCompletoALoPobre" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto;">
             <h3>¡Añade un toque especial con nuestros extras 🍔</h3>
             <label>
@@ -5425,8 +5446,8 @@ let = basePriceY = 2000
             <label for="totalExtrasCompletoJAMONCROCANTE">Total Extras:</label><br>
             <input type="text" id="totalExtrasCompletoJAMONCROCANTE" readonly value="0">
           
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -5589,8 +5610,8 @@ let = basePriceR = 2500
 
     <div id="divscompletoALOPOBRE" style="border: 2px solid black; background-color: white; position: relative; height: 100%; width: 100%; display: none;">
         <label>Selecciona una opción</label><br>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();simplecompletoALOPOBRE();cerrarventanablack();agregartexto('%COMPLETO A LO POBRE')" type="button" class="simpledoblecompletoALOPOBRE" id="completoALOPOBREsimpleX" style="color: black; background-color: yellow;">COMPLETO A LO POBRE</button>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();doblecompletoALOPOBRE();cerrarventanablack();agregartexto('%0ACOMPLETO A LO POBRE XL')" type="button" class="simpledoblecompletoALOPOBRE" id="completoALOPOBREdobleX" style="background-color: white; color: red;">COMPLETO A LO POBRE XL +$1000</button>
+        <button onclick="sumarTotalExtrasSinBorrar();simplecompletoALOPOBRE();cerrarventanablack();agregartexto('%0ACOMPLETO A LO POBRE')" type="button" class="simpledoblecompletoALOPOBRE" id="completoALOPOBREsimpleX" style="color: black; background-color: yellow;">COMPLETO A LO POBRE</button>
+        <button onclick="sumarTotalExtrasSinBorrar();doblecompletoALOPOBRE();cerrarventanablack();agregartexto('%0ACOMPLETO A LO POBRE XL')" type="button" class="simpledoblecompletoALOPOBRE" id="completoALOPOBREdobleX" style="background-color: white; color: red;">COMPLETO A LO POBRE XL +$1000</button>
         <div class="centauro" hidden z-index="300000" id="ventanaExtrasCompletoALoPobre" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto;">
             <h3>¡Añade un toque especial con nuestros extras 🍔</h3>
             <label>
@@ -5616,8 +5637,8 @@ let = basePriceR = 2500
             <label for="totalExtrasCompletoALOPOBRE">Total Extras:</label><br>
             <input type="text" id="totalExtrasCompletoALOPOBRE" readonly value="0">
           
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -5782,8 +5803,8 @@ let = basePriceJ = 3000
 
     <div id="divscompletoDINAMICO" style="border: 2px solid black; background-color: white; position: relative; height: 100%; width: 100%; display: none;">
         <label>Selecciona una opción</label><br>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();simplecompletoDINAMICO();cerrarventanablack();agregartexto('%COMPLETO DINAMICO')" type="button" class="simpledoblecompletoDINAMICO" id="completoDINAMICOsimpleX" style="color: black; background-color: yellow;">COMPLETO DINAMICO</button>
-        <button onclick="document.getElementById('ventana-inicio933').hidden = false;sumarTotalExtrasSinBorrar();doblecompletoDINAMICO();cerrarventanablack();agregartexto('%0ACOMPLETO DINAMICO XL')" type="button" class="simpledoblecompletoDINAMICO" id="completoDINAMICOdobleX" style="background-color: white; color: red;">COMPLETO DINAMICO XL +$1000</button>
+        <button onclick="sumarTotalExtrasSinBorrar();simplecompletoDINAMICO();cerrarventanablack();agregartexto('%0ACOMPLETO DINAMICO')" type="button" class="simpledoblecompletoDINAMICO" id="completoDINAMICOsimpleX" style="color: black; background-color: yellow;">COMPLETO DINAMICO</button>
+        <button onclick="sumarTotalExtrasSinBorrar();doblecompletoDINAMICO();cerrarventanablack();agregartexto('%0ACOMPLETO DINAMICO XL')" type="button" class="simpledoblecompletoDINAMICO" id="completoDINAMICOdobleX" style="background-color: white; color: red;">COMPLETO DINAMICO XL +$1000</button>
         <div class="centauro" hidden z-index="300000" id="ventanaExtrasCompletoALoPobre" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto;">
             <h3>¡Añade un toque especial con nuestros extras 🍔</h3>
             <label>
@@ -5809,8 +5830,8 @@ let = basePriceJ = 3000
             <label for="totalExtrasCompletoDINAMICO">Total Extras:</label><br>
             <input type="text" id="totalExtrasCompletoDINAMICO" readonly value="0">
           
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -6001,8 +6022,8 @@ let = basePriceU = 2500
             <label for="totalExtrasFAJITA">Total Extras:</label><br>
             <input type="text" id="totalExtrasFAJITA" readonly value="0">
           
-            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-  <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
+            <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();">Listo</button><br>
+  <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();"hidden>No, Gracias</button>
   
             <br><br>
           </div>
@@ -6510,12 +6531,30 @@ document.querySelectorAll('input[id*="totalExtras"]').forEach((input) => {
     </div>
             </div>
         </div>
-        <div style="margin-top: 0px;" id="ventana-inicio933" hidden>
-            <div class="modal-content" style="display: block; width: 90%; height: 80%;">
-                <div   z-index="300000" id="ventanaExtras1" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto; border: 2px solid black;">
+
+        <script>
+        function agregarTexto(nuevoTexto) {
+    let input = document.getElementById("pedidoinput");
+    
+    // Decodificar caracteres especiales (%0A) para que sean interpretados como saltos de línea
+    nuevoTexto = decodeURIComponent(nuevoTexto);
+
+    // Si el input ya tiene contenido, se agrega un salto de línea antes del nuevo texto
+    if (input.value) {
+        input.value += "\n" + nuevoTexto;
+    } else {
+        input.value = nuevoTexto;
+    }
+}
+
+        </script>
+
+        <div style="margin-top: 0px;" id="ventana-inicio76" hidden>
+            <div class="modal-content" style="width: 90%; height: 80%;">
+                <div   z-index="300000" id="ventanaExtras" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto; border: 2px solid black;">
                     <h3>¡Añade un toque especial con nuestros extras!🍔</h3>
                     <label>
-                      <input type="checkbox" class="extra" value="1000" data-nombre="Extra: Palta" onchange="actualizarExtrasx()"> 🥑 Extra Palta (+$1000)
+                      <input type="checkbox" class="extra" value="700" data-nombre="Extra: Palta" onchange="actualizarExtrasx()"> 🥑 Extra Palta (+$700)
                     </label><br>
                     <br>
                     <label>
@@ -6523,89 +6562,257 @@ document.querySelectorAll('input[id*="totalExtras"]').forEach((input) => {
                     </label><br>
                     <br>
                     <label>
-                      <input type="checkbox" class="extra" value="500" data-nombre="Extra: Lechuga" onchange="actualizarExtrasx()"> 🥬 Lechuga (+$500)
+                      <input type="checkbox" class="extra" value="500" data-nombre="Extra: Huevo"  onchange="actualizarExtrasx()"> 🥚 Extra Huevo (+$500)
                     </label><br>
                     <br>
                     <label>
-                      <input type="checkbox" class="extra" value="500" data-nombre="Extra: Mayonesa" onchange="actualizarExtrasx()"> 🫙 Extra Mayonesa (+$500)
+                      <input type="checkbox" class="extra" value="500" data-nombre="Extra: Pepinillos" onchange="actualizarExtrasx()"> 🥒 Extra Pepinillos (+$500)
                     </label><br>
                     <br>
                     <label>
-                      <input type="checkbox" class="extra" value="1000" data-nombre="Extra: Cebolla Acaramelizada" onchange="actualizarExtrasx()"> 🧅Cebolla Acaramelizada(+$1000)
+                      <input type="checkbox" class="extra" value="500" data-nombre="Extra: Cebolla" onchange="actualizarExtrasx()"> 🧅 Extra Cebolla (+$500)
                     </label><br>
                     <br><br>
                     <label for="totalextras">Total Extras:</label><br>
                     <input type="text" id="totalExtras" readonly value="0">
-                  
-                    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="document.getElementById('ventana-inicio933').hidden = true">Listo</button><br>
-                    <button type="button" style="background-color: red; color: #fff;" onclick="document.getElementById('ventana-inicio933').hidden = true"hidden>No, Gracias</button>
+            
+                    
+                    <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();document.getElementById('ventana-inicio76').hidden = true">Listo</button><br>
+                    <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();document.getElementById('ventana-inicio76').hidden = true"hidden>No, Gracias</button>
                   
                     <br><br>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+    const checkboxes = document.querySelectorAll(".extra");
+    const extrasTexto = document.getElementById("pedidoinput");
+    const totalExtras = document.getElementById("totalExtras");
+
+    function actualizarExtrasx() {
+        let seleccionados = extrasTexto.value ? extrasTexto.value.split("\n") : [];
+        let total = parseInt(totalExtras.value, 10) || 0;
+
+        checkboxes.forEach(cb => {
+            const nombreExtra = cb.getAttribute("data-nombre");
+            const valorExtra = parseInt(cb.value, 10);
+
+            if (cb.checked && !seleccionados.includes(nombreExtra)) {
+                seleccionados.push(nombreExtra);
+                total += valorExtra;
+            } else if (!cb.checked && seleccionados.includes(nombreExtra)) {
+                seleccionados = seleccionados.filter(item => item !== nombreExtra);
+                total -= valorExtra;
+            }
+        });
+
+        extrasTexto.value = seleccionados.join("\n");
+        totalExtras.value = total;
+    }
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", actualizarExtras);
+    });
+});
+
+                    </script>
+                  </div>
+
+                <br>
+    </div>
+    
+            </div>
+            <script>
+      function actualizarExtras() {
+    let checkboxes = document.querySelectorAll(".extra");
+    let total = 0;
+    let extrasSeleccionados = [];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            total += parseInt(checkbox.value);
+            extrasSeleccionados.push(checkbox.getAttribute("data-nombre"));
+        }
+    });
+
+    document.getElementById("totalExtras").value = total;
+    document.getElementById("pedidoinput").value = extrasSeleccionados.join(", ");
+    document.getElementById("pedidoinput").value = extrasSeleccionados.join(", "); // Se agrega al pedidoinput
+}
+
+            </script>
+            
+            <script>
+                function actualizarExtras() {
+    let extrasSeleccionados = [];
+    let checkboxes = document.querySelectorAll('.extra');
+    
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            extrasSeleccionados.push(checkbox.dataset.nombre);
+        }
+    });
+
+    // Verifica si el input existe antes de actualizarlo
+    let pedidoInput = document.getElementById("pedidoinput");
+    if (pedidoInput) {
+        pedidoInput.value = extrasSeleccionados.join(", ");
+    } else {
+        console.error("El elemento con ID 'pedidoinput' no existe en el HTML.");
+    }
+}
+
+                // Mantiene el total acumulado globalmente
+              
+                function actualizarExtrasC() {
+                  let checkboxes = document.querySelectorAll('#ventanaExtras1 .extra');
+                  let total = 0;
+              
+                  checkboxes.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                      total += parseInt(checkbox.value);
+                    }
+                  });
+              
+                  document.getElementById('totalExtrasc').value = total;
+                }
+              
+                function resetearInputsC() {
+                  let checkboxes = document.querySelectorAll('#ventanaExtras1 .extra');
+                  checkboxes.forEach((checkbox) => {
+                    checkbox.checked = false;
+                  });
+              
+                  document.getElementById('totalExtrasc').value = 0;
+                }
+              </script>
+              
+              <script>
+                let totalExtrasAcumulado = 0; // Mantiene el total acumulado siempre
+              
+                function actualizarExtras() {
+                  let checkboxes = document.querySelectorAll('.extra');
+                  let total = 0;
+              
+                  checkboxes.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                      total += parseInt(checkbox.value);
+                    }
+                  });
+              
+                  document.getElementById('totalExtras').value = total;
+                }
+              
+                function resetearInputs() {
+                  let checkboxes = document.querySelectorAll('.extra');
+                  checkboxes.forEach((checkbox) => {
+                    checkbox.checked = false;
+                  });
+              
+                  document.getElementById('totalExtras').value = 0;
+                }
+              </script>
+              
+    <div style="margin-top: 0px;" id="ventana-inicio933" hidden>
+                <div class="modal-content" style="display: block; width: 90%; height: 80%;">
+                    <div   z-index="300000" id="ventanaExtras1" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto; border: 2px solid black;">
+                        <h3>¡Añade un toque especial con nuestros extras!🍔</h3>
+                        <label>
+                          <input type="checkbox" class="extra" value="1000" data-nombre="Extra: Palta" onchange="actualizarExtras()"> 🥑 Extra Palta (+$1000)
+                        </label><br>
+                        <br>
+                        <label>
+                          <input type="checkbox" class="extra" value="1000" data-nombre="Extra: Queso" onchange="actualizarExtras()"> 🧀 Queso (+$1000)
+                        </label><br>
+                        <br>
+                        <label>
+                          <input type="checkbox" class="extra" value="500" data-nombre="Extra: Lechuga" onchange="actualizarExtras()"> 🥬 Lechuga (+$500)
+                        </label><br>
+                        <br>
+                        <label>
+                          <input type="checkbox" class="extra" value="500" data-nombre="Extra: Mayonesa" onchange="actualizarExtras()"> 🫙 Extra Mayonesa (+$500)
+                        </label><br>
+                        <br>
+                        <label>
+                          <input type="checkbox" class="extra" value="1000" data-nombre="Extra: Cebolla Acaramelizada" onchange="actualizarExtras()"> 🧅Cebolla Acaramelizada(+$1000)
+                        </label><br>
+                        <br><br>
+                        <label for="totalextrasc">Total Extras:</label><br>
+                        <input type="text" id="totalExtrasc" readonly value="0">
+                      
+                        <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="deslizarArriba();document.getElementById('ventana-inicio933').hidden = true">Listo</button><br>
+                        <button type="button" style="background-color: red; color: #fff;" onclick="deslizarArriba();document.getElementById('ventana-inicio933').hidden = true"hidden>No, Gracias</button>
+                      
+                        <br><br>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+    const checkboxes = document.querySelectorAll(".extra");
+    const pedidoInput = document.getElementById("pedidoinput");
+    const totalExtras = document.getElementById("totalExtrasc");
+
+    function actualizarExtras() {
+        let seleccionados = pedidoInput.value ? pedidoInput.value.split(", ") : [];
+        let total = parseInt(totalExtras.value, 10) || 0;
+
+        checkboxes.forEach(cb => {
+            if (cb.checked && !seleccionados.includes(cb.getAttribute("data-nombre"))) {
+                seleccionados.push(cb.getAttribute("data-nombre"));
+                total += parseInt(cb.value, 10);
+            } else if (!cb.checked && seleccionados.includes(cb.getAttribute("data-nombre"))) {
+                seleccionados = seleccionados.filter(item => item !== cb.getAttribute("data-nombre"));
+                total -= parseInt(cb.value, 10);
+            }
+        });
+
+        pedidoInput.value = seleccionados.join(", ");
+        totalExtras.value = total;
+    }
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", actualizarExtras);
+    });
+});
+
+                        </script>
                   </div>
 
                 <br>
     </div>
             </div>
-<script>
-function actualizarExtrasx() {
-    let checkboxes = document.querySelectorAll('.extra');
-    let total = 0;
-    let ingredientes = [];
 
-    checkboxes.forEach(checkbox => {
-        let valor = parseInt(checkbox.value);
-        let ingrediente = checkbox.getAttribute('data-nombre');
-
-        if (checkbox.checked) {
-            total += valor; // Sumar el valor al total
-            ingredientes.push(ingrediente); // Agregar ingrediente
-        }
-    });
-
-    // Actualizar valores en los inputs
-    document.getElementById("totalExtras").value = total;
-    document.getElementById("pedidoinput").value = ingredientes.join(', ');
-}
-
-</script>
+            <script>
+                let totalExtrasAcumuladoC = 0; // Variable global que mantiene el total acumulado
+              
+                function actualizarExtrasC() {
+                  let checkboxes = document.querySelectorAll('#ventanaExtras1 .extra');
+                  let total = 0;
+              
+                  checkboxes.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                      total += parseInt(checkbox.value);
+                    }
+                  });
+              
+                  document.getElementById('totalExtrasc').value = total;
+                  
+                  // Se mantiene el acumulado global, sumando nuevas selecciones sin perder el histórico
+                  totalExtrasAcumuladoC += total;
+                  console.log("Total acumulado:", totalExtrasAcumuladoC);
+                }
+              
+                function resetearInputsC() {
+                  let checkboxes = document.querySelectorAll('#ventanaExtras1 .extra');
+                  checkboxes.forEach((checkbox) => {
+                    checkbox.checked = false;
+                  });
+              
+                  document.getElementById('totalExtrasc').value = 0;
+              
+                  // No se resetea el acumulado para conservar el historial
+                  console.log("Total Extras (reseteado inputs):", totalExtrasAcumuladoC);
+                }
+              </script>
+              
             </div>
-            <div style="margin-top: 0px;" id="ventana-inicio43" hidden>
-                <div class="modal-content" style="width: 90%; height: 80%;">
-                    <div   z-index="300000" id="ventanaExtras" style="background-color: #f8f8f8; padding: 20px; border: 2px solid #ddd; display: block; margin: 20px auto; border: 2px solid black;">
-                        <h3>¡Añade un toque especial con nuestros extras!🍔</h3>
-                        <label>
-                            <label>
-                                <input type="checkbox" class="extraCompletoALoPobre" value="1000" data-nombre="Extra: Palta" onchange="actualizarExtrasCompletoJAMONCROCANTE()"> 🥑 Extra Palta (+$1000)
-                              </label><br>
-                              <br>
-                              <label>
-                                <input type="checkbox" class="extraCompletoALoPobre" value="1000" data-nombre="Extra: Queso" onchange="actualizarExtrasCompletoJAMONCROCANTE()"> 🧀 Queso (+$1000)
-                              </label><br>
-                              <br>
-                              <label>
-                                <input type="checkbox" class="extraCompletoALoPobre" value="500" data-nombre="Extra: Huevo" onchange="actualizarExtrasCompletoJAMONCROCANTE()"> 🥬 Lechuga (+$500)
-                              </label><br>
-                              <br>
-                              <label>
-                                <input type="checkbox" class="extraCompletoALoPobre" value="500" data-nombre="Extra: Pepinillos" onchange="actualizarExtrasCompletoJAMONCROCANTE()"> 🫙 Extra Mayonesa (+$500)
-                              </label><br>
-                              <br>
-                              <label>
-                                <input type="checkbox" class="extraCompletoALoPobre" value="1000" data-nombre="Extra: Cebolla acaramelizada" onchange="actualizarExtrasCompletoJAMONCROCANTE()"> 🧅 Cebolla acaramelizada (+$1000)
-                              </label><br>
-                              <br><br>
-                              <label for="totalExtrasCompletoJAMONCROCANTE">Total Extras:</label><br>
-                              <input type="text" id="totalExtrasCompletoJAMONCROCANTE" readonly value="0">
-                            
-                              <button type="button" style="background-color: green; color: #fff; font-size: 40px;" onclick="">Listo</button><br>
-                    <button type="button" style="background-color: red; color: #fff;" onclick=""hidden>No, Gracias</button>
-                    
-                              <br><br>
-                            </div>
-                      </div>
-        
-                </div>
-            
+         
                 
             <!-- Modal Carrito -->
 
@@ -6816,7 +7023,7 @@ function enviarPedidoWhatsApp() {
         
         }
                         </script>
-                        <button onclick="location.reload();" id="volverapedir" type="button" style="background-color: green; color: white; display: none;">Volver a Pedir</button>
+                        <button id="volverapedir" type="button" style="background-color: green; color: white; display: none;">Volver a Pedir</button>
                         <button onclick="enviarPedidoWhatsApp()" id="submit" style="color: #fff !important;">Enviar a Whatsapp</button>
                         <script>
                             function efectivo() {
