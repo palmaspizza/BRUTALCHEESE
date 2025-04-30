@@ -7,8 +7,8 @@
   <link rel="icon" href="https://cdn.glitch.global/8347b9c8-aa07-4cba-a343-7f3cc939462b/logobrutalcheesepng.ico?v=1743356795029" type="image/x-icon">
   
   <!-- Open Graph Tags -->
-  <meta property="og:title" content="Brutal Cheese!">
-  <meta property="og:description" content="¡Colaciones y Eventos!">
+  <meta property="og:title" content="¡Bienvenido a Brutal Cheese!">
+  <meta property="og:description" content="El mejor queso para tus momentos épicos.">
   <meta property="og:image
                   " content="https://cdn.glitch.global/8347b9c8-aa07-4cba-a343-7f3cc939462b/logobrutalcheesepng.ico?v=1743356795029">
   <meta property="og:url" content="https://tusitioweb.com">
@@ -6820,6 +6820,7 @@ document.querySelectorAll('input[id*="totalExtras"]').forEach((input) => {
                     <div class="modal-content" style="width: 90%; height: 100%;">
                         <span class="close" onclick="cerrarCarrito()" style="z-index: 1000000000; background-color: red; color: #fff; padding: 10px; margin-top: 20px;">CERRAR</span>
                         <h2>Carrito de Compras</h2>
+                        <button style="color: #000 !important;" type="button" onclick="finalizarbutton();cerrarCarrito();actualizarInputs();" style="display: none;" id="finalizar-button">Finalizar</button>
                         <button type="button" style="background-color: red; color: #fff; " onclick="location.reload();">Rehacer Pedido</button>
                         <div id="cartItems">
                         
